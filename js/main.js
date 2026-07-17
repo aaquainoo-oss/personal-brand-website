@@ -109,7 +109,7 @@
      (it looks like https://formspree.io/f/abcdwxyz). Until you do, the form
      falls back to opening the visitor's email app so nothing breaks.
   */
-  var FORMSPREE_ENDPOINT = "https://formspree.io/f/your-form-id";
+  var FORMSPREE_ENDPOINT = "https://formspree.io/f/mnjeplna";
   var FORMSPREE_READY = FORMSPREE_ENDPOINT.indexOf("your-form-id") === -1;
 
   var form = document.getElementById("contactForm");
@@ -150,7 +150,7 @@
       setBusy(true);
       setStatus("Sending…", "");
 
-      fetch(FORMSPREE_ENDPOINT, {https://formspree.io/f/mnjeplna
+      fetch(FORMSPREE_ENDPOINT, {
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(form)

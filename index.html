@@ -457,7 +457,10 @@
         </div>
 
         <div class="contact__grid">
-          <form class="contact__form" id="contactForm" novalidate>
+          <!-- To capture submissions in your inbox: create a free form at https://formspree.io,
+               then set FORMSPREE_ENDPOINT in js/main.js to your form URL (e.g. https://formspree.io/f/abcdwxyz).
+               The `action` below is a no-JS fallback — update it to the same URL. -->
+          <form class="contact__form" id="contactForm" action="https://formspree.io/f/your-form-id" method="POST" novalidate>
             <div class="field">
               <label for="name">Name</label>
               <input type="text" id="name" name="name" autocomplete="name" required />
@@ -479,7 +482,9 @@
               <label for="message">Message</label>
               <textarea id="message" name="message" rows="5" required></textarea>
             </div>
-            <button type="submit" class="btn btn--gold">Send Message</button>
+            <!-- Honeypot: hidden from people, catches spam bots. Leave empty. -->
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-5000px" />
+            <button type="submit" class="btn btn--gold" id="formSubmit">Send Message</button>
             <p class="contact__status" id="formStatus" role="status" aria-live="polite"></p>
           </form>
 

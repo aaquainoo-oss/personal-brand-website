@@ -74,14 +74,27 @@ Then point your custom domain at the host.
 
 ## Contact form
 
-The form currently works **front-end only**: it validates input and opens the
-visitor's email app pre-filled to `aaquainoo@theultimatecarellc.com`. To capture
-submissions server-side without running your own backend, swap it for a hosted
-form service:
+The form is wired for **[Formspree](https://formspree.io)** — a free hosted form
+backend that emails you each inquiry, with no server of your own to run. It works
+on any host, including GitHub Pages.
 
-- **Netlify Forms** — add `netlify` to the `<form>` tag when hosting on Netlify.
-- **Formspree** — point the form `action` at your Formspree endpoint.
-- **Custom API** — post the fields to your own server (see "Going further").
+**Two-minute setup:**
+
+1. Sign up at [formspree.io](https://formspree.io) and create a new form. Set the
+   destination to `aaquainoo@theultimatecarellc.com`.
+2. Copy the form URL Formspree gives you (looks like `https://formspree.io/f/abcdwxyz`).
+3. Paste it in **two places**, replacing `your-form-id`:
+   - `js/main.js` → the `FORMSPREE_ENDPOINT` constant near the contact-form code.
+   - `index.html` → the `<form ... action="...">` attribute (this is the no-JavaScript fallback).
+4. Submit a test message and confirm the first email (Formspree asks you to verify once).
+
+**Until you add your ID**, the form gracefully falls back to opening the visitor's
+email app pre-filled to your address — so it never looks broken. Once configured, it
+submits in the background and shows a "Thank you" message without leaving the page.
+A hidden honeypot field (`_gotcha`) filters out basic spam bots.
+
+Prefer a different service? **Netlify Forms** (add `netlify` to the `<form>` tag when
+hosting on Netlify) or your own **custom API** endpoint work too.
 
 ## Going further (the tech behind the brand)
 

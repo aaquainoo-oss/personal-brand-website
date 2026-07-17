@@ -101,14 +101,21 @@
     revealTargets.forEach(function (el) { el.classList.add("is-visible"); });
   }
 
-  /* ---------- Contact form (front-end only) ----------
-     No backend is wired up yet. This validates the fields
-     and opens the visitor's email client via a mailto link.
-     Replace with a real endpoint (Formspree, Netlify Forms,
-     or a custom API) to capture submissions server-side.
+  /* ---------- Contact form ----------
+     Submissions are captured via Formspree (https://formspree.io) — a hosted
+     form backend that emails you each inquiry, no server of your own required.
+
+     SETUP: create a free form at formspree.io, then paste your form URL below
+     (it looks like https://formspree.io/f/abcdwxyz). Until you do, the form
+     falls back to opening the visitor's email app so nothing breaks.
   */
+  var FORMSPREE_ENDPOINT = "https://formspree.io/f/your-form-id";
+  var FORMSPREE_READY = FORMSPREE_ENDPOINT.indexOf("your-form-id") === -1;
+
   var form = document.getElementById("contactForm");
   var status = document.getElementById("formStatus");
+  var submitBtn = document.getElementById("formSubmit");
+
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -126,16 +133,55 @@
         return;
       }
 
-      var subject = encodeURIComponent("[" + reason + "] from " + name);
-      var body = encodeURIComponent(
-        "Name: " + name + "\nEmail: " + email + "\nReason: " + reason + "\n\n" + message
-      );
-      window.location.href =
-        "mailto:aaquainoo@theultimatecarellc.com?subject=" + subject + "&body=" + body;
+      // Not configured yet → graceful mailto fallback.
+      if (!FORMSPREE_READY || !window.fetch) {
+        var subject = encodeURIComponent("[" + reason + "] from " + name);
+        var body = encodeURIComponent(
+          "Name: " + name + "\nEmail: " + email + "\nReason: " + reason + "\n\n" + message
+        );
+        window.location.href =
+          "mailto:aaquainoo@theultimatecarellc.com?subject=" + subject + "&body=" + body;
+        setStatus("Opening your email app… If nothing happens, email aaquainoo@theultimatecarellc.com directly.", "is-ok");
+        form.reset();
+        return;
+      }
 
-      setStatus("Opening your email app… If nothing happens, email aaquainoo@theultimatecarellc.com directly.", "is-ok");
-      form.reset();
+      // Configured → submit to Formspree via AJAX (visitor stays on the page).
+      setBusy(true);
+      setStatus("Sending…", "");
+
+      fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: new FormData(form)
+      })
+        .then(function (res) {
+          if (res.ok) {
+            setStatus("Thank you! Your message has been sent — I'll be in touch soon.", "is-ok");
+            form.reset();
+          } else {
+            return res.json().then(function (data) {
+              var msg =
+                data && data.errors && data.errors.length
+                  ? data.errors.map(function (er) { return er.message; }).join(", ")
+                  : "Something went wrong. Please email aaquainoo@theultimatecarellc.com directly.";
+              setStatus(msg, "is-err");
+            });
+          }
+        })
+        .catch(function () {
+          setStatus("Network error. Please email aaquainoo@theultimatecarellc.com directly.", "is-err");
+        })
+        .finally(function () {
+          setBusy(false);
+        });
     });
+  }
+
+  function setBusy(busy) {
+    if (!submitBtn) return;
+    submitBtn.disabled = busy;
+    submitBtn.textContent = busy ? "Sending…" : "Send Message";
   }
 
   function setStatus(msg, cls) {

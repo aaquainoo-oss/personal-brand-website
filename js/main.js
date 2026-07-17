@@ -150,7 +150,7 @@
       setBusy(true);
       setStatus("Sending…", "");
 
-      fetch(FORMSPREE_ENDPOINT, {
+      fetch(FORMSPREE_ENDPOINT, {https://formspree.io/f/mnjeplna
         method: "POST",
         headers: { Accept: "application/json" },
         body: new FormData(form)

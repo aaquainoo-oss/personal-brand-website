@@ -1,5 +1,6 @@
 import './globals.css';
 import { LifeOSStateProvider } from '../context/LifeOSStateContext';
+import { AccountProvider } from '../context/AccountContext';
 
 export const metadata = {
   title: 'Life OS — Growth Intelligence Platform',
@@ -15,7 +16,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <LifeOSStateProvider>{children}</LifeOSStateProvider>
+        <AccountProvider>
+          <LifeOSStateProvider>{children}</LifeOSStateProvider>
+        </AccountProvider>
       </body>
     </html>
   );

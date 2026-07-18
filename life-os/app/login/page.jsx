@@ -2,15 +2,36 @@
 
 import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Link from 'next/link';
 import { sx } from '../../lib/style';
+import { useAccount } from '../../context/AccountContext';
+import { setSessionKind } from '../../lib/sessionKind';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { account, verifyCredentials } = useAccount();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  async function establishSession(loginEmail, loginPassword, kind) {
+    const res = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: loginEmail, password: loginPassword }),
+    });
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+      setError(data.error || 'Sign in failed.');
+      return;
+    }
+    setSessionKind(kind);
+    const next = searchParams.get('next') || '/overview';
+    router.push(next);
+    router.refresh();
+  }
 
   async function doLogin(e) {
     e.preventDefault();
@@ -18,19 +39,27 @@ function LoginForm() {
     setError('');
     setSubmitting(true);
     try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        setError(data.error || 'Sign in failed.');
+      if (!account) {
+        setError('No account exists on this device yet. Sign up below, or continue in demo mode.');
         return;
       }
-      const next = searchParams.get('next') || '/overview';
-      router.push(next);
-      router.refresh();
+      const result = await verifyCredentials({ email, password });
+      if (!result.ok) {
+        setError(result.reason === 'bad-password' ? 'Incorrect password.' : 'No account found for that email.');
+        return;
+      }
+      await establishSession(email, password, 'account');
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function continueAsDemo() {
+    if (submitting) return;
+    setError('');
+    setSubmitting(true);
+    try {
+      await establishSession('demo@lifeos.app', 'demo-mode', 'demo');
     } finally {
       setSubmitting(false);
     }
@@ -47,6 +76,7 @@ function LoginForm() {
 
         <label style={sx('font-size:12px; font-weight:600; color:oklch(35% 0.015 90);')}>Email</label>
         <input
+          type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="jordan@example.com"
@@ -74,8 +104,20 @@ function LoginForm() {
         >
           {submitting ? 'Signing in…' : 'Sign In'}
         </button>
+
         <div style={sx('text-align:center; font-size:12px; color:oklch(50% 0.01 90); margin-top:14px;')}>
-          Demo mode — any email/password signs you in as Jordan Ellis.
+          {account ? (
+            <>New here? <Link href="/signup" style={sx('font-weight:600;')}>Create an account</Link></>
+          ) : (
+            <>No account yet? <Link href="/signup" style={sx('font-weight:600;')}>Sign up</Link></>
+          )}
+        </div>
+        <div
+          onClick={continueAsDemo}
+          data-testid="continue-demo"
+          style={sx('text-align:center; font-size:12px; color:oklch(50% 0.13 255); font-weight:600; margin-top:10px; cursor:pointer;')}
+        >
+          Continue in demo mode →
         </div>
       </form>
     </div>

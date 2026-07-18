@@ -12,30 +12,41 @@ A full-stack implementation of the "Life OS Platform" design (Claude Design hand
   (assessment scoring, the synthesized insight report, the 12-step roadmap, AI-style goal
   and vision draft suggestions) is computed server-side in `lib/logic.js` and served over
   these routes — the frontend only renders what the backend returns.
-- **Auth** — demo-mode login (`app/api/auth/login`), matching the design's "any
-  email/password signs you in as Jordan Ellis" copy. `middleware.js` gates every route
-  behind a session cookie.
+- **Auth** — real signup (`/signup`) and sign-in (`/login`), plus a one-click "Continue in
+  demo mode" fallback that still signs you in as the Jordan Ellis demo profile.
+  `middleware.js` gates every other route behind a session cookie.
 
-## Data persistence (current state)
+## Accounts (current state)
 
-There is no database wired up yet. A user's mutable data — assessment scores taken,
-goals/actions logged, vision board images/text, life stage result — is persisted in the
-browser via `localStorage` (see `context/LifeOSStateContext.jsx`), keyed per-device. The
-backend still owns all the *logic* (scoring, synthesis, suggestions); it just doesn't
-have a place to durably store per-user records yet.
+There is no database wired up yet, so accounts aren't server-side user records — signup
+collects name/email/password, validates it server-side (`app/api/auth/signup/route.js`),
+then creates the account **in the browser**: the password is salted and hashed with
+Web Crypto (SHA-256) before it's written to `localStorage` (`context/AccountContext.jsx`).
+Login re-hashes the entered password and compares it to that stored hash. This is
+meaningfully better than the original "any password works" demo, but it is **not**
+production-grade auth — anyone with devtools access to that browser profile can see the
+stored hash, only one account can exist per browser, and there's no password reset,
+email verification, or cross-device sign-in. Treat it as a fast, honest demo of the flow.
 
-**To upgrade to real server-side persistence**: provision a database (Postgres/Supabase/
-Neon all work well with Vercel), then replace the `localStorage` reads/writes in
-`LifeOSStateContext.jsx` with `fetch` calls to new `/api/state` routes backed by that
-database, and swap the demo login for real credential checks in
-`app/api/auth/login/route.js`.
+A user's other mutable data — assessment scores taken, goals/actions logged, vision board
+images/text, life stage result — persists the same way, in `localStorage`
+(`context/LifeOSStateContext.jsx`), keyed per-device. The backend still owns all the
+*logic* (scoring, synthesis, suggestions); it just doesn't have a place to durably store
+per-user records yet.
+
+**To upgrade to real server-side accounts + persistence**: provision a database
+(Postgres/Supabase/Neon all work well with Vercel), move account creation into
+`app/api/auth/signup/route.js` (hash with bcrypt/argon2, insert a row, issue a real
+session tied to a user id instead of the current flat `life_os_session` cookie), and
+replace the `localStorage` reads/writes in `LifeOSStateContext.jsx` and
+`AccountContext.jsx` with `fetch` calls to database-backed API routes.
 
 ## Run locally
 
 ```bash
 npm install
 npm run dev
-# visit http://localhost:3000 — any email/password signs you in
+# visit http://localhost:3000 — sign up, sign in, or continue in demo mode
 ```
 
 ## Deploy

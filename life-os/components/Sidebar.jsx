@@ -1,8 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { sx } from '../lib/style';
+import { useAccount } from '../context/AccountContext';
+import { clearSessionKind, getSessionKind } from '../lib/sessionKind';
 
 const NAV_ITEMS = [
   { href: '/overview', label: 'Home' },
@@ -21,9 +24,20 @@ const NAV_BASE = 'padding:10px 12px; border-radius:8px; font-size:14px; cursor:p
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const { account } = useAccount();
+  const [sessionKind, setLocalSessionKind] = useState(null);
+
+  useEffect(() => {
+    setLocalSessionKind(getSessionKind());
+  }, []);
+
+  const isRealSession = sessionKind === 'account' && !!account;
+  const displayName = isRealSession ? account.name : 'Jordan Ellis';
+  const displayEmail = isRealSession ? account.email : 'Demo mode';
 
   async function handleLogout() {
     await fetch('/api/auth/logout', { method: 'POST' });
+    clearSessionKind();
     router.push('/login');
     router.refresh();
   }
@@ -54,7 +68,8 @@ export default function Sidebar() {
 
       <div style={sx('margin-top:auto; padding-top:20px; border-top:1px solid oklch(40% 0.02 260);')}>
         <div style={sx('font-size:12px; opacity:0.5; margin-bottom:6px;')}>Signed in as</div>
-        <div style={sx('font-size:14px; font-weight:600;')}>Jordan Ellis</div>
+        <div style={sx('font-size:14px; font-weight:600;')}>{displayName}</div>
+        <div style={sx('font-size:12px; opacity:0.55;')}>{displayEmail}</div>
         <div style={sx('font-size:12px; opacity:0.55; margin-bottom:10px;')}>Coach: Dana Reyes</div>
         <a href="#" onClick={(e) => { e.preventDefault(); handleLogout(); }} style={sx('font-size:12px;')}>
           Sign out

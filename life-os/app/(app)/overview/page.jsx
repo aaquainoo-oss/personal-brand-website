@@ -9,12 +9,22 @@ export default function OverviewPage() {
   const { state } = useLifeOSState();
   const [data, setData] = useState(null);
 
+  const completedScoresKey = JSON.stringify(state.completedScores);
+
   useEffect(() => {
-    fetch('/api/dimensions')
+    fetch('/api/dimensions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ completedScores: state.completedScores }),
+    })
       .then((r) => r.json())
       .then(setData)
-      .catch(() => setData({ dimensions: [], keyInsights: [], compositeScore: 78 }));
-  }, []);
+      .catch(() => setData({ dimensions: [], keyInsights: [], compositeScore: 0 }));
+    // Re-fetch whenever the set of completed assessment scores changes (e.g.
+    // after taking or retaking one), not on every unrelated state update --
+    // completedScoresKey is a stable string, state.completedScores isn't.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completedScoresKey]);
 
   if (!data) {
     return <div style={sx('font-size:14px; color:oklch(45% 0.01 90);')}>Loading your profile…</div>;

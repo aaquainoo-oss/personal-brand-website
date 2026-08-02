@@ -1,0 +1,65 @@
+/* =========================================================
+   Synergy Konsulting — platform page
+   Additive styles on top of styles.css (shared design system)
+   ========================================================= */
+
+/* ---------- Hero (no portrait, single column) ---------- */
+.hero--synergy { min-height: 92vh; padding-bottom: 6rem; }
+.hero__inner--single { grid-template-columns: 1fr; max-width: 900px; text-align: center; }
+.hero__inner--single .hero__lead { margin-inline: auto; }
+.hero__inner--single .hero__actions { justify-content: center; }
+
+/* ---------- Framework band ---------- */
+.band { background: var(--navy-900); color: #fff; padding: 2.6rem 0; border-bottom: 1px solid rgba(212,175,55,0.2); }
+.band__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; text-align: center; }
+.band__item { padding: 0.5rem; border-left: 1px solid rgba(212,175,55,0.25); }
+.band__item:first-child { border-left: 0; }
+.band__value { display: block; font-family: var(--font-serif); font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: var(--gold); line-height: 1; }
+.band__label { display: block; margin-top: 0.5rem; font-size: 0.78rem; letter-spacing: 0.05em; text-transform: uppercase; color: rgba(255,255,255,0.72); }
+
+/* ---------- Checklist ---------- */
+.check-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.check-list li { position: relative; padding-left: 1.7rem; color: var(--ink-soft); font-size: 0.98rem; }
+.check-list li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--gold-deep); font-weight: 700; }
+
+/* ---------- Stacked pill list (used inside a card) ---------- */
+.values__list--stacked { flex-direction: column; align-items: stretch; gap: 0.5rem; }
+.values__list--stacked li { text-align: center; }
+
+/* ---------- Framework card description ---------- */
+.fw-card__desc { color: var(--ink-soft); font-size: 0.92rem; margin: 0 0 1rem; }
+
+/* ---------- 3D method timeline: light section, override dark-timeline text colors ---------- */
+.timeline--method .timeline__body h3 { color: var(--gold-deep); }
+.timeline--method .timeline__body p { color: var(--ink-soft); }
+.timeline--method .timeline__body ul { list-style: none; margin: 0.9rem 0 0; padding: 0; display: grid; gap: 0.4rem; }
+.timeline--method .timeline__body ul li { position: relative; padding-left: 1.3rem; color: var(--ink-soft); font-size: 0.92rem; }
+.timeline--method .timeline__body ul li::before { content: "—"; position: absolute; left: 0; color: var(--gold-deep); }
+
+/* ---------- Programs grid ---------- */
+.program-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
+.program-card { border: 1px solid rgba(212,175,55,0.2); background: rgba(255,255,255,0.04); padding: 1.6rem 1.4rem; transition: transform 0.25s ease, border-color 0.25s; }
+.program-card:hover { transform: translateY(-4px); border-color: var(--gold); }
+.program-card h3 { font-family: var(--font-serif); font-size: 1.2rem; margin: 0 0 0.5rem; color: var(--gold-soft); }
+.program-card p { margin: 0; color: rgba(255,255,255,0.7); font-size: 0.9rem; }
+
+/* ---------- Academy / Portal teaser ---------- */
+.teaser-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+.teaser-grid .mv-card { display: flex; flex-direction: column; }
+.teaser-grid .mv-card ul { list-style: none; margin: 0 0 1.5rem; padding: 0; display: grid; gap: 0.5rem; flex: 1; }
+.teaser-grid .mv-card ul li { position: relative; padding-left: 1.3rem; color: var(--ink-soft); font-size: 0.94rem; }
+.teaser-grid .mv-card ul li::before { content: "•"; position: absolute; left: 0.15rem; color: var(--gold-deep); }
+.btn--dark { border-color: var(--navy-700); color: var(--navy-700); align-self: flex-start; }
+.btn--dark:hover { background: var(--navy-800); border-color: var(--navy-800); color: #fff; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .band__grid { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+  .band__item:nth-child(odd) { border-left: 0; }
+  .program-grid { grid-template-columns: repeat(2, 1fr); }
+  .teaser-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .program-grid { grid-template-columns: 1fr; }
+}

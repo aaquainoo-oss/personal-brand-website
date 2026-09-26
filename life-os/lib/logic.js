@@ -32,6 +32,87 @@ export function barStyle(score) {
   return `height:100%; width:${score}%; background:${color}; border-radius:3px;`;
 }
 
+function effectiveAssessmentScores(completedScores) {
+  return assessmentsData.map((a) => ({
+    name: a.name,
+    score: completedScores[a.name] ?? a.score,
+    insight: a.insight,
+    taken: completedScores[a.name] !== undefined,
+  }));
+}
+
+function cleanAssessmentName(name) {
+  return name.replace(' Assessment', '').replace(' Profile', '');
+}
+
+// The 12 Dimensions of Life bars: each dimension is the average of the
+// assessments feeding it (areaAssessmentMap), using the user's own retaken
+// score where they've taken it and the baseline demo score otherwise -- so
+// the bars (and everything derived from them) actually move as real
+// assessments get completed, instead of sitting on the fixed demo profile.
+export function computeDimensionScores(completedScores = {}) {
+  const effective = {};
+  assessmentsData.forEach((a) => {
+    effective[a.name] = completedScores[a.name] ?? a.score;
+  });
+  return dimNames.map((name, i) => {
+    const linked = areaAssessmentMap[name] || [];
+    const scores = linked.map((n) => effective[n]).filter((s) => s !== undefined);
+    const score = scores.length ? Math.round(scores.reduce((s, v) => s + v, 0) / scores.length) : dimScoresBase[i];
+    return { name, score };
+  });
+}
+
+export function computeCompositeScore(dimensions) {
+  if (!dimensions.length) return 0;
+  return Math.round(dimensions.reduce((s, d) => s + d.score, 0) / dimensions.length);
+}
+
+// Overview page's 4 key-insight cards, recomputed from the same live data as
+// the composite score and dimension bars -- so "Primary Gap" / "Strongest
+// Trait" always name whichever assessment is actually weakest/strongest for
+// this user, not a fixed "Emotional Intelligence" / "Productivity" callout.
+export function computeKeyInsights(completedScores = {}) {
+  const effectiveAssessments = effectiveAssessmentScores(completedScores);
+  const byScoreAsc = [...effectiveAssessments].sort((a, b) => a.score - b.score);
+  const weakestAssessment = byScoreAsc[0];
+  const strongestAssessment = byScoreAsc[byScoreAsc.length - 1];
+
+  const dimensions = computeDimensionScores(completedScores);
+  const weakestDimension = [...dimensions].sort((a, b) => a.score - b.score)[0];
+
+  const compositeScore = computeCompositeScore(dimensions);
+  const tier = compositeScore >= 80 ? 'Strong Profile' : compositeScore >= 60 ? 'Emerging Leader' : 'Growth Focus';
+  const completedCount = Object.keys(completedScores).length;
+
+  return [
+    {
+      label: 'Composite Score',
+      value: `${compositeScore} / 100 — ${tier} tier`,
+      detail: `${completedCount} of 15 assessments completed`,
+      color: 'oklch(50% 0.12 255)',
+    },
+    {
+      label: 'Primary Gap',
+      value: cleanAssessmentName(weakestAssessment.name),
+      detail: `Score of ${weakestAssessment.score} — lowest-scoring input, weighted heaviest in plan`,
+      color: 'oklch(55% 0.15 25)',
+    },
+    {
+      label: 'Strongest Trait',
+      value: cleanAssessmentName(strongestAssessment.name),
+      detail: `Score of ${strongestAssessment.score} — your most consistent strength`,
+      color: 'oklch(55% 0.13 155)',
+    },
+    {
+      label: 'Recommended Focus',
+      value: weakestDimension.name,
+      detail: 'Your growth plan should weight this life dimension heavily',
+      color: 'oklch(50% 0.1 280)',
+    },
+  ];
+}
+
 // Scores a completed Likert flow (values 0-4 per question) into a 0-100 score + band + insight copy.
 export function scoreAnswers(answers) {
   const answered = answers.filter((v) => v !== undefined && v !== null);

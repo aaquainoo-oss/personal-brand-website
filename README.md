@@ -13,11 +13,13 @@ no build step, no framework — so it's easy to host anywhere and easy to learn 
 
 ```
 personal-brand-website/
-├── index.html          # All page content and structure
+├── index.html              # Ayeshia's personal brand site
+├── synergy-konsulting.html # The Synergy Konsulting platform page
 ├── css/
-│   └── styles.css       # Deep navy + gold executive theme
+│   ├── styles.css          # Deep navy + gold executive theme (shared)
+│   └── synergy.css         # Synergy Konsulting page-specific styles
 ├── js/
-│   └── main.js          # Nav, animated stats, scroll reveals, contact form
+│   └── main.js              # Nav, animated stats, scroll reveals, contact form (shared)
 ├── images/
 │   └── ayeshia-portrait.jpg   # ← add your professional portrait here
 └── README.md
@@ -39,6 +41,29 @@ personal-brand-website/
 | **Resources** | Publications, frameworks, and courses |
 | **Media** | Videos, podcasts, and interviews |
 | **Contact** | Inquiry form (speaking / consulting / partnerships) |
+
+### Synergy Konsulting platform (`synergy-konsulting.html`)
+
+A standalone page positioning **Synergy Konsulting** as the strategic transformation
+partner for home health, home care, group homes, behavioral health, assisted living,
+hospice, and healthcare entrepreneurs.
+
+| Section | Purpose |
+|---|---|
+| **Hero** | Brand position and calls to action |
+| **Band** | Framework snapshot (3S · 3D · industries · programs) |
+| **About** | Brand position, what Synergy helps clients build, signature titles |
+| **The 3S Framework™** | Structure · Systems · Strategy — the operating foundation |
+| **The 3D Transformation Method™** | Discover · Develop · Deploy — the engagement methodology |
+| **Programs** | The 15 signature consulting programs |
+| **Industries** | The 10 industries served |
+| **AI Tools** | Roadmap of AI tools rolling out across the platform |
+| **Academy & Client Portal** | Certification tracks and portal features (waitlist) |
+| **Contact** | Discovery-call inquiry form |
+
+It reuses the same design system, `main.js`, and Formspree contact form as the main
+site, plus `css/synergy.css` for page-specific components (framework band, program
+grid, academy/portal teaser cards).
 
 ## Add your portrait
 

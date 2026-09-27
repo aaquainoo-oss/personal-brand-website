@@ -80,7 +80,7 @@
 
   /* ---------- Reveal-on-scroll ---------- */
   var revealTargets = document.querySelectorAll(
-    ".section__head, .about__story, .about__cards, .values, .org-card, .fw-card, .timeline__item, .topic-card, .testimonial, .resource-card, .media-card, .contact__form, .contact__aside, .impact__map, .program-card, .teaser-grid"
+    ".section__head, .about__story, .about__cards, .values, .dossier-item, .mv-item, .fw-card, .timeline__item, .testimonial, .resource-card, .media-card, .contact__form, .contact__aside, .impact__map, .program-card, .teaser-grid"
   );
   revealTargets.forEach(function (el) { el.classList.add("reveal"); });
 

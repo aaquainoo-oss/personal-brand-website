@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Ultimate Care Trifold</title>
+<link href="assets/fonts/fonts.css" rel="stylesheet">
+<style>
+  /*
+   * The Ultimate Care — trifold brochure (11 x 8.5 in, landscape, letter fold)
+   * Sheet 1 = OUTSIDE: [inside flap] [back cover] [front cover]
+   * Sheet 2 = INSIDE:  [care range]  [care levels] [why TUC]
+   */
+  :root {
+    --navy: #0a1f8f;
+    --royal: #0b36c9;
+    --royal-2: #1848e0;
+    --sky: #2f8cff;
+    --sky-2: #54a8ff;
+    --ice: #e8f1ff;
+    --white: #ffffff;
+    --ink: #0c1d5c;
+    --muted: #c9d8ff;
+    --panel-w: 3.6667in;
+    --pad: 0.32in;
+  }
+  @page { size: 11in 8.5in; margin: 0; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: #5a6478; }
+  body {
+    font-family: "Open Sans", Arial, sans-serif;
+    color: var(--white);
+    font-size: 8.6pt;
+    line-height: 1.4;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .sheet {
+    width: 11in; height: 8.5in;
+    margin: 0.4in auto;
+    display: grid;
+    grid-template-columns: repeat(3, var(--panel-w));
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    page-break-after: always;
+    break-after: page;
+  }
+  @media print {
+    html, body { background: none; }
+    .sheet { margin: 0; box-shadow: none; }
+  }
+  .panel {
+    position: relative;
+    height: 8.5in;
+    padding: var(--pad);
+    overflow: hidden;
+    background: linear-gradient(180deg, var(--royal) 0%, var(--royal) 42%, var(--navy) 100%);
+  }
+  .panel + .panel { box-shadow: inset 1px 0 0 rgba(255,255,255,.08); }
+  .panel.light {
+    background: #eef4ff;
+    color: var(--ink);
+  }
+
+  h1, h2, h3, .eyebrow, .kicker { font-family: "Montserrat", Arial, sans-serif; }
+  .eyebrow {
+    font-size: 7pt; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--sky-2);
+  }
+  .light .eyebrow { color: var(--royal); }
+  h2 {
+    font-size: 17pt; line-height: 1.12; font-weight: 800; letter-spacing: -.01em;
+    margin: .05in 0 .1in;
+  }
+  h3 { font-size: 9.6pt; font-weight: 700; line-height: 1.2; }
+  p + p { margin-top: .07in; }
+  .lede { font-size: 9.2pt; color: var(--muted); }
+  .light .lede { color: #3a4a7e; }
+  .small { font-size: 7.2pt; line-height: 1.35; color: var(--muted); }
+  .light .small { color: #4b5a8c; }
+  strong { font-weight: 700; }
+
+  /* Photo with wave edge */
+  .photo {
+    position: relative;
+    margin: calc(-1 * var(--pad)) calc(-1 * var(--pad)) 0;
+    height: 2.35in;
+    background-size: cover; background-position: center;
+  }
+  .photo svg { position: absolute; left: 0; bottom: -1px; width: 100%; height: .5in; display: block; }
+  .photo.bottom { margin: 0 calc(-1 * var(--pad)) calc(-1 * var(--pad)); }
+  .photo.bottom svg { top: -1px; bottom: auto; }
+
+  /* Bullets */
+  ul.ticks { list-style: none; }
+  ul.ticks li { position: relative; padding-left: .17in; margin: .035in 0; }
+  ul.ticks li::before {
+    content: ""; position: absolute; left: 0; top: .055in;
+    width: .08in; height: .08in; border-radius: 50%;
+    background: var(--sky);
+    box-shadow: 0 0 0 2px rgba(47,140,255,.25);
+  }
+
+  /* Phone call-to-action */
+  .cta {
+    display: flex; align-items: center; gap: .12in;
+    background: var(--white); color: var(--royal);
+    border-radius: .12in; padding: .12in .16in;
+  }
+  .cta .icon {
+    flex: none; width: .38in; height: .38in; border-radius: 50%;
+    background: var(--royal); display: grid; place-items: center;
+  }
+  .cta .label { font-size: 7.2pt; font-weight: 600; color: #3a4a7e; line-height: 1.25; }
+  .cta .phone { font-family: "Montserrat", Arial, sans-serif; font-size: 15pt; font-weight: 800; line-height: 1.1; letter-spacing: -.01em; }
+
+  /* ---------- FRONT COVER ---------- */
+  .cover .photo { height: 3.35in; }
+  .cover .logo {
+    position: absolute; right: .26in; top: 2.72in; z-index: 2;
+    width: 1.05in; height: 1.05in; border-radius: 50%;
+    background: url(assets/logo.jpg) center/118% no-repeat;
+    box-shadow: 0 0 0 .05in var(--white), 0 6px 18px rgba(0,0,0,.35);
+  }
+  .cover .brand {
+    font-family: "Montserrat", Arial, sans-serif; font-weight: 700;
+    font-size: 10pt; letter-spacing: .02em; margin-top: .18in;
+  }
+  .cover .brand span { display: block; font-size: 6.8pt; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--sky-2); margin-top: .02in; }
+  .cover h1 {
+    font-size: 18.5pt; line-height: 1.08; font-weight: 800; letter-spacing: -.015em;
+    margin: .2in 0 .12in;
+  }
+  .cover h1 em { font-style: normal; color: var(--sky-2); display: block; }
+  .cover .support { font-size: 9.4pt; color: var(--muted); max-width: 3in; }
+  .cover .services {
+    margin: .16in 0 0; display: flex; flex-wrap: wrap; gap: .05in;
+  }
+  .chip {
+    font-size: 7pt; font-weight: 700; padding: .035in .09in; border-radius: 99px;
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+    white-space: nowrap;
+  }
+  .cover .cta { position: absolute; left: var(--pad); right: var(--pad); bottom: var(--pad); }
+
+  /* ---------- BACK COVER ---------- */
+  .back h2 { margin-top: .06in; }
+  .contact-card {
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16);
+    border-radius: .14in; padding: .16in; margin: .16in 0;
+  }
+  .qr-row { display: flex; gap: .14in; align-items: center; margin-top: .14in; }
+  .qr {
+    flex: none; width: 1in; height: 1in; background: var(--white) url(assets/qr.jpg) center/88% no-repeat;
+    border-radius: .08in;
+  }
+  .qr-row .how { font-size: 8.4pt; }
+  .qr-row .how strong { display: block; font-family: "Montserrat", Arial, sans-serif; font-size: 9.6pt; line-height: 1.2; margin-bottom: .04in; }
+  .contact-list { list-style: none; margin-top: .14in; font-size: 8.4pt; }
+  .contact-list li { display: flex; justify-content: space-between; gap: .1in; padding: .045in 0; border-top: 1px solid rgba(255,255,255,.14); }
+  .contact-list li span:first-child { color: var(--muted); }
+  .contact-list li span:last-child { font-weight: 700; text-align: right; }
+  .info-block { margin-top: .16in; }
+  .info-block h3 { display: flex; align-items: center; gap: .07in; margin-bottom: .05in; }
+  .pay { display: grid; grid-template-columns: 1fr 1fr; gap: .02in .12in; }
+  .back .fine { position: absolute; left: var(--pad); right: var(--pad); bottom: .22in; }
+
+  /* ---------- INSIDE FLAP (confidence) ---------- */
+  .flap .photo { height: 2.25in; background-position: 50% 30%; }
+  .founder { display: flex; flex-direction: column; gap: .06in; }
+  .founder .sig { font-family: "Montserrat", Arial, sans-serif; font-weight: 700; font-size: 8.6pt; }
+  .founder .sig span { display: block; font-family: "Open Sans", Arial, sans-serif; font-weight: 400; font-size: 7.2pt; color: var(--muted); }
+  .quote {
+    position: relative; margin: .16in 0 .14in;
+    background: var(--white); color: var(--ink); border-radius: .14in;
+    padding: .16in .16in .14in .5in;
+  }
+  .quote::before {
+    content: "\201C"; position: absolute; left: .12in; top: -.02in;
+    font-family: Georgia, serif; font-size: 40pt; line-height: 1; color: var(--sky);
+  }
+  .quote p { font-style: italic; font-size: 8.8pt; }
+  .quote .who { margin-top: .06in; font-size: 7.2pt; font-weight: 700; color: var(--royal); font-style: normal; }
+  .placeholder { outline: 1.5px dashed #f5b400; outline-offset: 2px; }
+  .badges { display: grid; gap: .06in; margin-top: .08in; }
+  .badges img { width: 100%; display: block; border-radius: .05in; }
+
+  /* ---------- INSIDE LEFT (services) ---------- */
+  .svc-group { margin-top: .13in; }
+  .svc-group h3 { display: flex; align-items: center; gap: .08in; margin-bottom: .03in; color: var(--royal); }
+  .svc-group .num {
+    flex: none; width: .24in; height: .24in; border-radius: 50%;
+    background: var(--royal); color: var(--white); font-size: 7.6pt; display: grid; place-items: center;
+  }
+  .svc-group ul.ticks { padding-left: .32in; }
+  .svc-group ul.ticks li { margin: .015in 0; }
+  .affiliate {
+    margin-top: .14in; padding: .1in .12in; border-radius: .1in;
+    background: rgba(11,54,201,.07); border: 1px dashed rgba(11,54,201,.35);
+  }
+  .affiliate h3 { font-size: 8.4pt; color: var(--royal); margin-bottom: .03in; }
+  .services-panel .photo.bottom { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; height: 1.7in; }
+
+  /* ---------- INSIDE CENTER (tiers) ---------- */
+  .tiers { display: grid; gap: .09in; margin-top: .06in; }
+  .tier {
+    background: var(--white); color: var(--ink); border-radius: .12in;
+    padding: .1in .13in .1in; position: relative;
+  }
+  .tier-head { display: flex; align-items: baseline; gap: .08in; }
+  .tier-head .lvl { font-family: "Montserrat", Arial, sans-serif; font-size: 6.6pt; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--sky); }
+  .tier h3 { font-size: 11pt; color: var(--royal); }
+  .tier p { font-size: 8pt; margin-top: .02in; color: #34437a; }
+  .tier .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: .05in; margin-top: .06in; }
+  .tier .facts div { background: var(--ice); border-radius: .06in; padding: .04in .05in; text-align: center; }
+  .tier .facts b { display: block; font-family: "Montserrat", Arial, sans-serif; font-size: 8.4pt; color: var(--royal); line-height: 1.15; }
+  .tier .facts span { font-size: 6.3pt; color: #4b5a8c; line-height: 1.15; display: block; }
+  .tier.signature { background: linear-gradient(135deg, var(--white) 0%, #dbe9ff 100%); box-shadow: inset 0 0 0 2px var(--sky); }
+  .tiers-panel .note { margin-top: .12in; }
+  .tiers-panel .note p { color: var(--muted); }
+
+  /* ---------- INSIDE RIGHT (why TUC) ---------- */
+  .why .photo { height: 2.05in; background-position: 50% 25%; }
+  .promise {
+    font-family: "Montserrat", Arial, sans-serif; font-weight: 600; font-size: 9.2pt; line-height: 1.35;
+    border-left: 3px solid var(--sky); padding-left: .12in; margin: .04in 0 .12in;
+  }
+  .reason { display: flex; gap: .1in; margin-top: .1in; }
+  .reason .ico {
+    flex: none; width: .34in; height: .34in; border-radius: .09in;
+    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.2);
+    display: grid; place-items: center;
+  }
+  .reason h3 { margin-bottom: .015in; }
+  .reason p { font-size: 8pt; color: var(--muted); }
+  .why .cta { position: absolute; left: var(--pad); right: var(--pad); bottom: var(--pad); }
+
+  svg.i { width: .19in; height: .19in; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .reason .ico svg.i, .info-block svg.i { color: var(--sky-2); }
+  .cta .icon svg.i { color: var(--white); }
+</style>
+</head>
+<body>
+
+<!-- Reusable wave shapes -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="wave-down" viewBox="0 0 400 60" preserveAspectRatio="none">
+      <path d="M0 26 C 110 58, 250 0, 400 30 L400 60 L0 60 Z" fill="#2f8cff"/>
+      <path d="M0 40 C 120 66, 260 14, 400 42 L400 60 L0 60 Z" style="fill:var(--wave-fill, #0b36c9)"/>
+    </symbol>
+    <symbol id="wave-up" viewBox="0 0 400 60" preserveAspectRatio="none">
+      <path d="M0 34 C 140 2, 270 60, 400 26 L400 0 L0 0 Z" fill="#2f8cff"/>
+      <path d="M0 20 C 140 -8, 270 46, 400 14 L400 0 L0 0 Z" style="fill:var(--wave-fill, #0b36c9)"/>
+    </symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></symbol>
+    <symbol id="i-steth" viewBox="0 0 24 24"><path d="M5 3v6a5 5 0 0 0 10 0V3"/><path d="M10 14v2a5 5 0 0 0 10 0v-3"/><circle cx="20" cy="11" r="2"/></symbol>
+    <symbol id="i-plan" viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2l8 3v6c0 5-3.5 9.3-8 11-4.5-1.7-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 22s7-6.3 7-12a7 7 0 0 0-14 0c0 5.7 7 12 7 12z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></symbol>
+  </defs>
+</svg>
+
+<!-- =========================== SHEET 1 · OUTSIDE =========================== -->
+<section class="sheet" aria-label="Outside of brochure">
+
+  <!-- Inside flap: build confidence -->
+  <article class="panel flap">
+    <div class="photo" style="background-image:url(assets/photo-nurse-senior.jpg)">
+      <svg><use href="#wave-down" style="--wave-fill:#0b36c9"/></svg>
+    </div>
+    <p class="eyebrow" style="margin-top:.08in">Our story</p>
+    <h2>Founded by a nurse.<br>Built for families.</h2>
+    <div class="founder">
+      <p>Ayeshia Quainoo-Tefera founded The Ultimate Care in 2017 after caring for loved ones of her own. With 19+ years as a registered nurse and a master’s in nursing, she built TUC around careful assessment, well-trained caregivers and clear communication with families.</p>
+      <p class="sig">Ayeshia Quainoo-Tefera, MSN, RN, CMSRN<span>Founder &amp; President</span></p>
+    </div>
+
+    <div class="quote placeholder">
+      <p>[Approved client testimonial here: one or two sentences about the care your family received.]</p>
+      <p class="who">[Client first name or initials, relationship · used with written permission]</p>
+    </div>
+
+    <p class="small">Read more reviews from families on our Google page.</p>
+    <div class="badges">
+      <img src="assets/badges-row1.jpg" alt="SCORE, BBB Accredited Business A+ rating, and Virginia SWaM certified small, women and minority-owned business">
+      <img src="assets/badges-row2.jpg" alt="Inc. 5000; Best of Home Care Provider of Choice, Employer of Choice and Leader in Training">
+    </div>
+  </article>
+
+  <!-- Back cover: take action -->
+  <article class="panel back">
+    <p class="eyebrow">Next step</p>
+    <h2>Let’s talk about the care you need.</h2>
+    <p class="lede">A care consultation helps us understand your loved one’s needs, answer your questions and recommend the right level of support.</p>
+
+    <div class="contact-card">
+      <div class="cta">
+        <div class="icon"><svg class="i"><use href="#i-phone"/></svg></div>
+        <div><div class="label">Call to request a care consultation</div><div class="phone">703-468-7019</div></div>
+      </div>
+      <div class="qr-row">
+        <div class="qr" role="img" aria-label="QR code"></div>
+        <div class="how"><strong>Scan to request a care consultation</strong>Share a few details online and a member of our team will call you back.</div>
+      </div>
+      <ul class="contact-list">
+        <li><span>Web</span><span>theultimatecarellc.com</span></li>
+        <li><span>Email</span><span>info@theultimatecarellc.com</span></li>
+        <li><span>Fax</span><span>844-380-3550</span></li>
+      </ul>
+    </div>
+
+    <div class="info-block">
+      <h3><svg class="i"><use href="#i-pin"/></svg>Where we serve</h3>
+      <p>Northern Virginia, including Arlington, Alexandria, Fairfax, Fauquier, Loudoun, Prince William, Orange, Stafford and Spotsylvania, and surrounding areas.</p>
+    </div>
+
+    <div class="info-block">
+      <h3><svg class="i"><use href="#i-card"/></svg>Ways to pay</h3>
+      <ul class="ticks pay">
+        <li>Private pay</li>
+        <li>Long-term care insurance</li>
+        <li>Medicaid</li>
+        <li>Veterans benefits</li>
+        <li>Commercial health plans</li>
+        <li>Workers’ compensation</li>
+      </ul>
+      <p class="small" style="margin-top:.06in">Coverage varies by service and plan. Contact us to verify eligibility.</p>
+    </div>
+  </article>
+
+  <!-- Front cover -->
+  <article class="panel cover">
+    <div class="photo" style="background-image:url(assets/photo-group.jpg)">
+      <svg><use href="#wave-down" style="--wave-fill:#0b36c9"/></svg>
+    </div>
+    <div class="logo" role="img" aria-label="The Ultimate Care logo"></div>
+    <p class="brand">The Ultimate Care<span>Nurse-led home care</span></p>
+    <h1>Compassionate Care. Clinical Excellence. <em>Peace of Mind.</em></h1>
+    <p class="support">From everyday personal support to complex nursing care, The Ultimate Care helps people live with dignity and peace of mind at home.</p>
+    <div class="services">
+      <span class="chip">Personal Care</span>
+      <span class="chip">Companion Care</span>
+      <span class="chip">Private Duty Nursing</span>
+      <span class="chip">Skilled Nursing</span>
+      <span class="chip">Care Coordination</span>
+    </div>
+    <div class="cta">
+      <div class="icon"><svg class="i"><use href="#i-phone"/></svg></div>
+      <div><div class="label">Call or scan to request a care consultation</div><div class="phone">703-468-7019</div></div>
+    </div>
+  </article>
+</section>
+
+<!-- =========================== SHEET 2 · INSIDE =========================== -->
+<section class="sheet" aria-label="Inside of brochure">
+
+  <!-- Inside left: care range -->
+  <article class="panel light services-panel">
+    <p class="eyebrow">Our services</p>
+    <h2 style="color:var(--royal)">Care that grows with your needs</h2>
+    <p class="lede">One nurse-led team, from a few hours of help each week to complex nursing at home, for children through older adults.</p>
+
+    <div class="svc-group">
+      <h3><span class="num">1</span>Everyday support</h3>
+      <ul class="ticks">
+        <li>Personal care</li>
+        <li>Companion care</li>
+        <li>Medication reminders</li>
+      </ul>
+    </div>
+    <div class="svc-group">
+      <h3><span class="num">2</span>Nursing care</h3>
+      <ul class="ticks">
+        <li>Skilled nursing</li>
+        <li>Private duty nursing</li>
+        <li>Medication management</li>
+        <li>Home infusion therapy</li>
+      </ul>
+    </div>
+    <div class="svc-group">
+      <h3><span class="num">3</span>Care coordination</h3>
+      <ul class="ticks">
+        <li>Care planning and coordination</li>
+        <li>Medical social services</li>
+        <li>In-home lab draws</li>
+      </ul>
+    </div>
+
+    <div class="affiliate">
+      <h3>Through our affiliate partners*</h3>
+      <p class="small">Rehabilitation · Outpatient infusion therapy · Outpatient medical aesthetics</p>
+      <p class="small" style="margin-top:.03in"><em>*Provided in collaboration with an affiliated organization. Ask us which provider delivers each service.</em></p>
+    </div>
+
+    <div class="photo bottom" style="background-image:url(assets/photo-companion.jpg)">
+      <svg><use href="#wave-up" style="--wave-fill:#eef4ff"/></svg>
+    </div>
+  </article>
+
+  <!-- Inside center: care levels -->
+  <article class="panel tiers-panel">
+    <p class="eyebrow">Care plans</p>
+    <h2>Choose the level of support that fits</h2>
+    <p class="small" style="color:var(--muted);font-size:8pt">Each level builds on the one before it, with more nurse oversight as needs grow.</p>
+
+    <div class="tiers">
+      <div class="tier">
+        <div class="tier-head"><span class="lvl">Level 1</span></div>
+        <h3>Essential Care</h3>
+        <p>Personal care and companionship to keep daily life safe and familiar.</p>
+        <div class="facts">
+          <div><b>Quarterly</b><span>in-home visits</span></div>
+          <div><b>Not included</b><span>telehealth calls</span></div>
+          <div><b>2 / year</b><span>family care meetings</span></div>
+        </div>
+      </div>
+      <div class="tier">
+        <div class="tier-head"><span class="lvl">Level 2</span></div>
+        <h3>Enhanced Care</h3>
+        <p>Everything in Essential, plus medication reminders and more hands-on support.</p>
+        <div class="facts">
+          <div><b>Quarterly</b><span>in-home visits</span></div>
+          <div><b>Quarterly</b><span>telehealth calls</span></div>
+          <div><b>3 / year</b><span>family care meetings</span></div>
+        </div>
+      </div>
+      <div class="tier">
+        <div class="tier-head"><span class="lvl">Level 3</span></div>
+        <h3>Advanced Care</h3>
+        <p>Everything in Enhanced, plus specialized care for more complex health needs.</p>
+        <div class="facts">
+          <div><b>Every 60 days</b><span>in-home visits</span></div>
+          <div><b>Every 2 months</b><span>telehealth calls</span></div>
+          <div><b>4 / year</b><span>family care meetings</span></div>
+        </div>
+      </div>
+      <div class="tier signature">
+        <div class="tier-head"><span class="lvl">Level 4</span></div>
+        <h3>Signature Care</h3>
+        <p>Everything in Advanced, plus a dedicated care team that knows your loved one well.</p>
+        <div class="facts">
+          <div><b>Monthly</b><span>in-home visits</span></div>
+          <div><b>Monthly</b><span>telehealth calls</span></div>
+          <div><b>6 / year</b><span>family care meetings</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">
+      <p class="small"><strong style="color:var(--white)">Family care meeting:</strong> a scheduled review of the care plan with you, your loved one and the care team.</p>
+      <p class="small"><strong style="color:var(--white)">Not sure which fits?</strong> We’ll recommend a level after your consultation.</p>
+    </div>
+  </article>
+
+  <!-- Inside right: why TUC -->
+  <article class="panel why">
+    <div class="photo" style="background-image:url(assets/photo-nurse-wheelchair.jpg)">
+      <svg><use href="#wave-down" style="--wave-fill:#0b36c9"/></svg>
+    </div>
+    <p class="eyebrow" style="margin-top:.06in">Why families choose TUC</p>
+    <p class="promise">Reliable, compassionate and competent care that supports dignity, independence and peace of mind at home.</p>
+
+    <div class="reason">
+      <div class="ico"><svg class="i"><use href="#i-steth"/></svg></div>
+      <div><h3>Nurse-led from day one</h3><p>Nursing leadership assesses each client and updates the plan as needs change.</p></div>
+    </div>
+    <div class="reason">
+      <div class="ico"><svg class="i"><use href="#i-plan"/></svg></div>
+      <div><h3>A plan built around you</h3><p>We build each care plan with the client and family, and review it together.</p></div>
+    </div>
+    <div class="reason">
+      <div class="ico"><svg class="i"><use href="#i-users"/></svg></div>
+      <div><h3>Screened, trained caregivers</h3><p>Every team member passes a 360° screening before joining and receives ongoing training.</p></div>
+    </div>
+    <div class="reason">
+      <div class="ico"><svg class="i"><use href="#i-shield"/></svg></div>
+      <div><h3>Safety you can count on</h3><p>Staff raise concerns promptly and follow S.T.A.R.: Stop, Think, Act, Review.</p></div>
+    </div>
+    <div class="reason">
+      <div class="ico"><svg class="i"><use href="#i-clock"/></svg></div>
+      <div><h3>Responsive coordination</h3><p>Timely answers and clear updates, so families always know what’s next.</p></div>
+    </div>
+
+    <div class="cta">
+      <div class="icon"><svg class="i"><use href="#i-phone"/></svg></div>
+      <div><div class="label">Request a care consultation</div><div class="phone">703-468-7019</div></div>
+    </div>
+  </article>
+</section>
+
+</body>
+</html>
